@@ -1,0 +1,1241 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Superman — The Man of Steel (Refined)</title>
+    <style>
+        /* ============================
+       Variables & Base
+       ============================ */
+        :root {
+            --bg-1: #0b1b3f;
+            --bg-2: #050816;
+            --accent-blue: #1b3f80;
+            --accent-red: #ff345c;
+            --gold: #ffd700;
+            --muted: #cbd6e6;
+            --glass: rgba(255, 255, 255, 0.06);
+            --glass-strong: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 215, 0, 0.18);
+            --shadow-strong: 0 24px 60px rgba(0, 0, 0, 0.7);
+            --ease: cubic-bezier(.2, .9, .2, 1);
+            --max-width: 1200px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            color: #fff;
+            background:
+                radial-gradient(1400px 800px at 10% 0%, rgba(27, 63, 128, 0.34), transparent 55%),
+                radial-gradient(1100px 600px at 90% 100%, rgba(255, 52, 92, 0.22), transparent 55%),
+                linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 70%);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        ::selection {
+            background: rgba(255, 215, 0, 0.36);
+            color: #000
+        }
+
+        /* subtle animated starfield + nebula texture */
+        .starfield {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            mix-blend-mode: screen;
+            background-image:
+                radial-gradient(1px 1px at 12% 24%, rgba(255, 255, 255, 0.10), transparent),
+                radial-gradient(1px 1px at 28% 72%, rgba(255, 255, 255, 0.08), transparent),
+                radial-gradient(1px 1px at 46% 38%, rgba(255, 255, 255, 0.07), transparent),
+                radial-gradient(1px 1px at 78% 22%, rgba(255, 255, 255, 0.06), transparent),
+                radial-gradient(2px 2px at 62% 84%, rgba(255, 255, 255, 0.09), transparent);
+            opacity: .9;
+            animation: starDrift 22s linear infinite;
+        }
+
+        @keyframes starDrift {
+            0% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-10px)
+            }
+
+            100% {
+                transform: translateY(0)
+            }
+        }
+
+        /* ============================
+       NAV
+       ============================ */
+        nav {
+            position: sticky;
+            top: 18px;
+            z-index: 55;
+            display: flex;
+            justify-content: center;
+            padding: 0 1rem
+        }
+
+        .nav-inner {
+            width: min(var(--max-width), 96%);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            padding: .6rem 1.4rem;
+            border-radius: 999px;
+            background: linear-gradient(120deg, rgba(6, 10, 20, 0.72), rgba(15, 52, 96, 0.78));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            animation: fadeInDown .7s var(--ease) forwards;
+            transform: translateY(-12px);
+            opacity: 0;
+        }
+
+        .nav-inner a {
+            font-weight: 700;
+            color: var(--gold);
+            padding: .45rem .7rem;
+            font-size: .9rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            transition: transform .16s var(--ease), color .16s var(--ease);
+        }
+
+        .nav-inner a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 2px;
+            transform: scaleX(0);
+            transform-origin: left;
+            background: linear-gradient(90deg, var(--gold), #fff);
+            transition: transform .2s var(--ease);
+        }
+
+        .nav-inner a:hover {
+            transform: translateY(-3px);
+            color: #fff;
+        }
+
+        .nav-inner a:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* ============================
+       HERO
+       ============================ */
+        header.hero {
+            position: relative;
+            padding: 4.5rem 1.5rem 4rem;
+            min-height: 92vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .hero-inner {
+            width: min(var(--max-width), 96%);
+            display: grid;
+            grid-template-columns: 1.2fr 0.9fr;
+            gap: 2.2rem;
+            align-items: center;
+            padding: 2.2rem;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(7, 18, 50, 0.96));
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-strong);
+            backdrop-filter: blur(14px);
+            transform: translateY(18px);
+            opacity: 0;
+            animation: heroRise .9s .12s var(--ease) forwards;
+        }
+
+        .hero-left {
+            padding: 6px 0
+        }
+
+        h1.title {
+            font-size: clamp(2.8rem, 6vw, 4.2rem);
+            text-align: left;
+            color: var(--gold);
+            letter-spacing: .14em;
+            margin-bottom: 6px;
+            text-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        .subtitle {
+            font-weight: 700;
+            text-align: left;
+            color: #fff;
+            letter-spacing: .24em;
+            text-transform: uppercase;
+            opacity: .95;
+            font-size: .9rem;
+        }
+
+        .tagline {
+            max-width: 42ch;
+            margin: 1rem 0 1.2rem;
+            text-align: left;
+            color: #f1f4ff;
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            justify-content: flex-start;
+            gap: 1rem;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: .85rem 1.4rem;
+            border-radius: 999px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            gap: .6rem;
+            align-items: center;
+            font-size: .95rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-red), #ff8a9f);
+            color: #fff;
+            box-shadow: 0 16px 32px rgba(255, 52, 92, 0.35);
+            animation: buttonGlow 3s ease-in-out infinite alternate;
+        }
+
+        .btn-primary::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.4), transparent 55%);
+            mix-blend-mode: screen;
+            opacity: 0;
+            transition: opacity .2s var(--ease), transform .2s var(--ease);
+            transform: translateX(-15%);
+        }
+
+        .btn-primary:hover::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .btn-ghost {
+            background: rgba(5, 10, 24, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            color: #f5f5f5;
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+        }
+
+        /* HERO RIGHT — big floating logo where emblem was */
+        .hero-right {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-logo-orb {
+            position: relative;
+            width: 100%;
+            max-width: 340px;
+            aspect-ratio: 1/1;
+            border-radius: 28px;
+            padding: 1.6rem;
+            background:
+                radial-gradient(circle at 10% 0%, rgba(255, 215, 0, 0.30), transparent 60%),
+                radial-gradient(circle at 90% 100%, rgba(255, 52, 92, 0.30), transparent 55%),
+                linear-gradient(145deg, rgba(4, 12, 32, 0.95), rgba(15, 52, 96, 0.98));
+            box-shadow: 0 28px 60px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            animation: floatOrb 6s ease-in-out infinite;
+        }
+
+        .hero-logo-orb::before {
+            content: "";
+            position: absolute;
+            inset: -20%;
+            background:
+                radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.16), transparent 55%),
+                radial-gradient(circle at 70% 80%, rgba(255, 215, 0, 0.24), transparent 60%);
+            opacity: .7;
+            mix-blend-mode: screen;
+            filter: blur(10px);
+        }
+
+        .hero-logo-orb img {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.9));
+            animation: glowPulse 4s ease-in-out infinite;
+            transform: translateY(2px);
+        }
+
+        .tiny {
+            font-size: .86rem;
+            color: var(--muted);
+            text-align: center
+        }
+
+        /* ============================
+       Section standard container
+       ============================ */
+        .container {
+            width: min(var(--max-width), 96%);
+            margin: 3rem auto 5rem;
+        }
+
+        section.block {
+            background: linear-gradient(135deg, rgba(27, 63, 128, 0.45), rgba(7, 18, 50, 0.95));
+            border-radius: 14px;
+            padding: 1.8rem;
+            margin-bottom: 1.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 14px 38px rgba(0, 0, 0, 0.55);
+            opacity: 0;
+            transform: translateY(18px);
+            animation: fadeInUp .9s ease-out forwards;
+        }
+
+        section.block:nth-of-type(1) {
+            animation-delay: .12s
+        }
+
+        section.block:nth-of-type(2) {
+            animation-delay: .18s
+        }
+
+        section.block:nth-of-type(3) {
+            animation-delay: .24s
+        }
+
+        section.block:nth-of-type(4) {
+            animation-delay: .30s
+        }
+
+        section.block:nth-of-type(5) {
+            animation-delay: .36s
+        }
+
+        section.block:nth-of-type(6) {
+            animation-delay: .42s
+        }
+
+        section.block:nth-of-type(7) {
+            animation-delay: .48s
+        }
+
+        section.block h2 {
+            font-size: 1.6rem;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            margin-bottom: .7rem;
+            text-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .lead {
+            color: #dfe8ff;
+            margin-bottom: .7rem;
+        }
+
+        /* ============================
+       Grid & slot styles for movies/shows
+       ============================ */
+        .grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))
+        }
+
+        .slot {
+            display: flex;
+            gap: .9rem;
+            align-items: flex-start;
+            padding: .95rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            background: linear-gradient(145deg, rgba(10, 22, 52, 0.9), rgba(27, 63, 128, 0.9));
+            transition: transform .18s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease);
+        }
+
+        .slot:hover {
+            transform: translateY(-8px) translateZ(0);
+            box-shadow: 0 22px 52px rgba(0, 0, 0, 0.7);
+            border-color: rgba(255, 215, 0, 0.6);
+        }
+
+        .poster {
+            width: 100px;
+            height: 150px;
+            border-radius: 10px;
+            overflow: hidden;
+            flex: 0 0 100px;
+            background: linear-gradient(180deg, #071226, #091733);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform .3s var(--ease), opacity .3s var(--ease)
+        }
+
+        .slot:hover .poster img {
+            transform: scale(1.05)
+        }
+
+        .meta {
+            flex: 1
+        }
+
+        .meta .title {
+            font-weight: 800;
+            color: var(--gold);
+            margin-bottom: .18rem;
+        }
+
+        .meta .sub {
+            color: #cbd6e6;
+            font-size: .92rem;
+            margin-bottom: .45rem;
+        }
+
+        .meta .where {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.3);
+            padding: .36rem .6rem;
+            border-radius: 999px;
+            font-size: .86rem;
+            color: #e9eefc;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+        }
+
+        /* small helper row */
+        .section-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: .95rem
+        }
+
+        /* ============================
+       Powers cards
+       ============================ */
+        .powers-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            margin-top: .5rem
+        }
+
+        .power-card {
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            background: linear-gradient(145deg, rgba(10, 22, 52, 0.9), rgba(10, 30, 70, 0.98));
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+            transition: transform .18s var(--ease), box-shadow .18s var(--ease), border-color .18s var(--ease);
+        }
+
+        .power-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
+            border-color: rgba(255, 215, 0, 0.7);
+        }
+
+        .power-card h3 {
+            color: var(--gold);
+            margin-bottom: .32rem
+        }
+
+        .power-card p {
+            color: #dfe8ff;
+            line-height: 1.45
+        }
+
+        /* ============================
+       Developer block (about me)
+       ============================ */
+        .dev {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            padding: .9rem;
+            border-radius: 12px;
+            background: linear-gradient(145deg, rgba(10, 22, 52, 0.9), rgba(27, 63, 128, 0.95));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        .dev .text {
+            flex: 1
+        }
+
+        .placeholders {
+            display: flex;
+            gap: .6rem;
+            flex-wrap: wrap;
+            margin-top: .6rem
+        }
+
+        .placeholder {
+            width: 120px;
+            height: 72px;
+            border-radius: 9px;
+            background: #071226;
+            border: 1px dashed rgba(255, 255, 255, 0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9fb1d8;
+            font-size: .86rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+
+        /* ============================
+       Footer
+       ============================ */
+        footer {
+            padding: 2.4rem 1rem 2.8rem;
+            text-align: center;
+            color: var(--gold);
+            margin-top: 1.8rem;
+            font-size: .9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            background: linear-gradient(180deg, rgba(7, 18, 50, 0.2), rgba(5, 8, 22, 0.95));
+        }
+
+        /* ============================
+       Animations & responsiveness
+       ============================ */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(22px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-16px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes heroRise {
+            from {
+                opacity: 0;
+                transform: translateY(28px) scale(.98)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1)
+            }
+        }
+
+        @keyframes floatOrb {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg)
+            }
+
+            50% {
+                transform: translateY(-10px) translateX(6px) rotate(1.5deg)
+            }
+
+            100% {
+                transform: translateY(0) translateX(0) rotate(0deg)
+            }
+        }
+
+        @keyframes glowPulse {
+            0% {
+                filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.75));
+                transform: translateY(2px) scale(1)
+            }
+
+            50% {
+                filter: drop-shadow(0 20px 50px rgba(255, 215, 0, 0.5));
+                transform: translateY(0) scale(1.02)
+            }
+
+            100% {
+                filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.75));
+                transform: translateY(2px) scale(1)
+            }
+        }
+
+        @keyframes buttonGlow {
+            0% {
+                box-shadow: 0 16px 32px rgba(255, 52, 92, 0.25)
+            }
+
+            100% {
+                box-shadow: 0 18px 40px rgba(255, 215, 150, 0.45)
+            }
+        }
+
+        @media (max-width:1000px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-right {
+                order: 1
+            }
+
+            .hero-left {
+                order: 2;
+                text-align: center
+            }
+
+            h1.title,
+            .subtitle,
+            .tagline,
+            .hero-cta {
+                text-align: center;
+                justify-content: center
+            }
+
+            .poster {
+                width: 86px;
+                height: 130px
+            }
+
+            .hero-logo-orb {
+                max-width: 260px
+            }
+        }
+
+        @media (max-width:480px) {
+            .poster {
+                width: 76px;
+                height: 112px
+            }
+
+            .nav-inner {
+                gap: .6rem;
+                padding: .5rem .9rem
+            }
+
+            h1.title {
+                font-size: 2.4rem
+            }
+
+            .hero-inner {
+                padding: 1.5rem
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- subtle star/nebula texture -->
+    <div class="starfield" aria-hidden="true"></div>
+
+    <!-- NAV -->
+    <nav aria-label="Main navigation">
+        <div class="nav-inner">
+            <a href="#origin">Origin</a>
+            <a href="#powers">Powers</a>
+            <a href="#movies">Movies</a>
+            <a href="#shows">Shows</a>
+            <a href="#developer">Developer</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero" role="banner">
+        <div class="hero-inner">
+            <!-- LEFT: Title & text -->
+            <div class="hero-left">
+                <h1 class="title">SUPERMAN</h1>
+                <div class="subtitle">THE MAN OF STEEL</div>
+                <p class="tagline">
+                    Sent from the doomed world of Krypton and raised as Clark Kent on Earth,
+                    Superman stands as the universe’s most enduring symbol of hope and courage.
+                </p>
+
+                <div class="hero-cta">
+                    <a class="btn btn-primary" href="#movies">Browse Movies</a>
+                    <a class="btn btn-ghost" href="#powers">Explore Powers</a>
+                </div>
+            </div>
+
+            <!-- RIGHT: big floating logo (replaces emblem) -->
+            <div class="hero-right" aria-hidden="true">
+                <div class="hero-logo-orb">
+                    <!-- local uploaded logo path -->
+                    <img src="pngwing.com.png" alt="Superman logo" />
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="container" role="main">
+        <!-- ORIGIN -->
+        <section id="origin" class="block" aria-labelledby="origin-h">
+            <h2 id="origin-h"> Origin Story</h2>
+            <p class="lead">
+                Born as <strong style="color:var(--gold)">Kal-El</strong> begins on the planet Krypton, where scientists
+                Jor-El and Lara send theirinfant son &amp;
+                Kal-El, to Earth in a rocket just before their planet is destroyed. &amp; He is found and adopted by
+                Jonathan and Martha Kent in Smallville,
+                who raise him as Clark Kent. As he grows, he discovers his alien abilities and dedicates his life to
+                helping humanity as the hero
+                Superman &amp;
+            </p>
+            <p>
+                Under Earth's yellow sun his physiology absorbs solar energy granting incredible powers.
+                Choosing compassion, he becomes Superman a beacon of hope.
+            </p>
+        </section>
+
+        <!-- POWERS -->
+        <section id="powers" class="block" aria-labelledby="powers-h">
+            <h2 id="powers-h">Powers &amp; Abilities</h2>
+            <p class="lead">Comprehensive breakdown grouped for clarity: Core, Sensory &amp; Vision, Other Abilities.
+            </p>
+
+            <!-- CORE -->
+            <div style="margin-top:.6rem">
+                <h3 style="color:var(--muted); margin-bottom:.45rem">Core Powers &amp; Abilities</h3>
+                <div class="powers-grid" role="list">
+                    <div class="power-card" role="listitem">
+                        <h3>Superhuman Strength</h3>
+                        <p>Near limitless physical strength; capable of lifting far in excess of a billion tons in some
+                            continuities.</p>
+                    </div>
+
+                    <div class="power-card" role="listitem">
+                        <h3>Flight</h3>
+                        <p>Manipulates his own gravitational field to fly from supersonic to faster-than-light in
+                            certain stories.</p>
+                    </div>
+
+                    <div class="power-card" role="listitem">
+                        <h3>Invulnerability</h3>
+                        <p>Dense molecular structure and a bio-electric aura render him nearly impervious to most
+                            attacks and extremes.</p>
+                    </div>
+
+                    <div class="power-card" role="listitem">
+                        <h3>Super Speed</h3>
+                        <p>Moves and reacts at superhuman speeds; perception can be accelerated to keep pace with the
+                            fastest beings.</p>
+                    </div>
+
+                    <div class="power-card" role="listitem">
+                        <h3>Accelerated Healing</h3>
+                        <p>Rapidly heals from injuries while exposed to solar energy; many wounds close in moments.</p>
+                    </div>
+
+                    <div class="power-card" role="listitem">
+                        <h3>Stamina / Self-Sustenance</h3>
+                        <p>Solar absorption provides immense stamina operates without food, water, or sleep for extended
+                            periods.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISION & SENSORY -->
+            <div style="margin-top:1rem">
+                <h3 style="color:var(--muted); margin-bottom:.45rem">Sensory &amp; Vision Powers</h3>
+                <div class="powers-grid" role="list">
+                    <div class="power-card">
+                        <h3>Heat Vision</h3>
+                        <p>Emits beams of intense, focused heat from his eyes, with fine control over power and
+                            precision.</p>
+                    </div>
+
+                    <div class="power-card">
+                        <h3>X-Ray Vision</h3>
+                        <p>See through most materials (lead blocks it); useful for structural analysis and threat
+                            detection.</p>
+                    </div>
+
+                    <div class="power-card">
+                        <h3>Telescopic Vision</h3>
+                        <p>View great distances, from cities away to orbit, with clear detail.</p>
+                    </div>
+
+                    <div class="power-card">
+                        <h3>Microscopic Vision</h3>
+                        <p>Focus vision down to microscopic levels for detailed investigation and diagnostics.</p>
+                    </div>
+
+                    <div class="power-card">
+                        <h3>Electromagnetic Spectrum Vision</h3>
+                        <p>Perceive radio waves, energy signatures, and other parts of the EM spectrum.</p>
+                    </div>
+
+                    <div class="power-card">
+                        <h3>Super Hearing</h3>
+                        <p>Hear faint sounds across vast distances, including specific heartbeats or cries for help.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OTHER -->
+            <div style="margin-top:1rem">
+                <h3 style="color:var(--muted); margin-bottom:.45rem">Other Abilities</h3>
+                <div class="powers-grid" role="list">
+                    <div class="power-card">
+                        <h3>Super Breath / Freeze Breath</h3>
+                        <p>Exhales gale force winds or freezing blasts to extinguish fires or immobilize threats.</p>
+                    </div>
+
+                    <div class="power-card">
+                        <h3>Solar Flare</h3>
+                        <p>In some stories he can release all stored solar energy in one massive burst, leaving him
+                            drained.</p>
+                    </div>
+
+                    <div class="power-card">
+                        <h3>Genius-Level Intellect</h3>
+                        <p>Efficient cognitive processing; learns languages, skills, and complex concepts rapidly.</p>
+                    </div>
+
+                    <div class="power-card">
+                        <h3>Indomitable Will</h3>
+                        <p>Unshakeable moral compass and inner strength, aiding resistance to telepathy and corruption.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MOVIES: Live-action -->
+        <section id="movies" class="block" aria-labelledby="movies-h">
+            <div class="section-row">
+                <h2 id="movies-h"> Live-action Movies</h2>
+                <div class="muted"></div>
+            </div>
+            <p class="lead">Iconic theatrical films. </p>
+
+            <div class="grid" role="list">
+                <article class="slot" role="listitem">
+                    <div class="poster">
+                        <img src="https://resizing.flixster.com/-gRHdOqjkfCquOpxCM-tyugKAjc=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/NowShowing/10286/10286_aa.jpg"
+                            alt="Superman (1978) poster" onerror="this.style.opacity='.06';">
+                    </div>
+                    <div class="meta">
+                        <div class="title">Superman (1978)</div>
+                        <div class="sub">Dir: Richard Donner/Christopher Reeve</div>
+
+
+                        <div class="where">Prime / Apple</div>
+                    </div>
+                </article>
+
+                <article class="slot" role="listitem">
+                    <div class="poster">
+                        <img src="https://neiloseman.com/wp-content/uploads/2021/01/Superman-II-poster.jpg"
+                            alt="Superman II poster" onerror="this.style.opacity='.06';">
+                    </div>
+                    <div class="meta">
+                        <div class="title">Superman II (1980)</div>
+                        <div class="sub">Dir: Richard Lester / Christopher Reev</div>
+                        <div class="where">HBO Max</div>
+                    </div>
+                </article>
+
+                <article class="slot" role="listitem">
+                    <div class="poster">
+                        <img src="https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p9259673_p_v10_an.jpg"
+                            alt="Man of Steel poster" onerror="this.style.opacity='.06';">
+                    </div>
+                    <div class="meta">
+                        <div class="title">Man of Steel (2013)</div>
+                        <div class="sub">Dir: Zack Snyder · Henry Cavill</div>
+                        <div class="where">JioHotstar</div>
+                    </div>
+                </article>
+
+                <article class="slot" role="listitem">
+                    <div class="poster">
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgKtIa2T5pCM48QaWoF8bdLC1JU1aPNIz1VLfau9CBvS40DIwrJdKZhtyaXp6p4jIvkCPq5oTVn87jmsb1zz7QTCve7b1rqclmao4ovozfR4ArUnrXC1rlpbGUVjhyrSsy4hcBnw_K1k86VXgqocFku1AY14qcF90ZJ_m5RiVK2nk-3Xvq1ONDO8u0mX_c/s1750/Superman.jpg"
+                            alt="Superman (2025) poster" onerror="this.style.opacity='.06';">
+                    </div>
+                    <div class="meta">
+                        <div class="title">Superman (2025)</div>
+                        <div class="sub">Dir: James Gunn New DC Universe</div>
+                        <div class="where">Prime Video</div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- SHOWS: Live-action -->
+        <section id="shows" class="block" aria-labelledby="shows-h">
+            <div class="section-row">
+                <h2 id="shows-h">Live-action Shows</h2>
+
+            </div>
+            <p class="lead">Series that center on or frequently feature Superman.</p>
+
+            <div class="grid" role="list">
+                <article class="slot">
+                    <div class="poster">
+                        <img src="https://m.media-amazon.com/images/M/MV5BNjdlZTU5YjEtNmMzZi00NDU1LWI0MTgtMDZlZDE2YTYxNTlmXkEyXkFqcGc@._V1_.jpg"
+                            alt="Lois &amp; Clark poster" onerror="this.style.opacity='.06';">
+                    </div>
+                    <div class="meta">
+                        <div class="title">Lois &amp; Clark</div>
+                        <div class="sub">1990s drama</div>
+                        <div class="where">Prime Video</div>
+                    </div>
+                </article>
+
+                <article class="slot">
+                    <div class="poster">
+                        <img src="https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p184732_b_v8_aj.jpg"
+                            alt="Smallville poster" onerror="this.style.opacity='.06';">
+                    </div>
+                    <div class="meta">
+                        <div class="title">Smallville</div>
+                        <div class="sub">2001–2011</div>
+                        <div class="where">Prime Video</div>
+                    </div>
+                </article>
+
+                <article class="slot">
+                    <div class="poster">
+                        <img src="https://m.media-amazon.com/images/I/811-rwR0FuL._AC_UF1000,1000_QL80_.jpg"
+                            alt="Superman &amp; Lois poster" onerror="this.style.opacity='.06';">
+                    </div>
+                    <div class="meta">
+                        <div class="title">Superman &amp; Lois</div>
+                        <div class="sub">Modern CW drama 2021-24
+                        </div>
+                        <div class="where">Prime Video</div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- ANIMATED MOVIES -->
+        <section id="animated-movies" class="block" aria-labelledby="am-h">
+            <div class="section-row">
+                <h2 id="am-h"> Animated Movies</h2>
+                <div class="muted">Direct-to-video &amp; theatrical animated features</div>
+            </div>
+            <p class="lead">Animated feature films featuring Superman.</p>
+
+            <div class="grid">
+                <article class="slot">
+                    <div class="poster">
+                        <img src="https://resizing.flixster.com/QWmhfLAWuim5gDzL4ACb0JJLoaE=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p15532769_v_h9_aa.jpg"
+                            alt="Death of Superman poster" onerror="this.style.opacity='.06';">
+                    </div>
+                    <div class="meta">
+                        <div class="title">The Death of Superman (2018)</div>
+                        <div class="sub">Animated feature</div>
+                        <div class="where">Prime Video</div>
+                    </div>
+                </article>
+
+                <article class="slot">
+                    <div class="poster">
+                        <img src="https://m.media-amazon.com/images/M/MV5BY2Y5ZjhhM2EtMDJhMy00YWEyLWE3NGYtNWZjNTM2YzAyODE4XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg"
+                            alt="Man of Tomorrow poster" onerror="this.style.opacity='.06';">
+                    </div>
+                    <div class="meta">
+                        <div class="title">Superman: Man of Tomorrow (2020)</div>
+                        <div class="sub">Animated feature</div>
+                        <div class="where">Prime Video</div>
+                    </div>
+                </article>
+
+                <article class="slot">
+                    <div class="poster">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVJ6zGz95DEAkF2H0y6U8LLiLH3ZPUY-H-AE_ZhKysF7V7KKXK4Wpf6o7OCNLqzJD4_nH80w&s"
+                            alt="Animated collection poster" onerror="this.style.opacity='.06';">
+                    </div>
+                    <div class="meta">
+                        <div class="title">All Star Superman (2011)</div>
+                        <div class="sub">Animated Feature</div>
+                        <div class="where">Prime Video</div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- ANIMATED SHOWS -->
+        <section id="animated-shows" class="block" aria-labelledby="as-h">
+            <div class="section-row">
+                <h2 id="as-h">Animated Shows</h2>
+                <div class="muted">Classic series &amp; shared DCAU</div>
+            </div>
+            <p class="lead">The animated universe where Superman appears frequently.</p>
+
+            <div class="grid">
+                <article class="slot">
+                    <div class="poster">
+                        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxMTEhUSEhMWFRUXGBgVFRYWFxUYGBUXGRgYGBcdFh4ZHSggGxolHhobIjEhJSkrLi4uFx81ODMtNygtLisBCgoKDg0OGxAQGy0mICUtLy8tLS8tLS0tLS8tLS0tLy0vLy8tLTItLS8tLS0tLy0tLS8tLS0tLS0tLS0tLS0tLf/AABEIAKgBLAMBEQACEQEDEQH/xAAcAAABBQEBAQAAAAAAAAAAAAAAAQIDBQYEBwj/xABEEAABAgQDBAcGBAMHAwUAAAABAhEAAxIhBDFBBSJRYQYTMnGBkfAHQqGxwdEjUuHxFDNiQ2NygpKisiTC4hUWF5Oz/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAEFAgMEBgf/xAA7EQACAQIDBgQFAwMCBgMAAAAAAQIDEQQhMQVBUWFx8BKBkaEiscHR4QYTMiNC8RRiFTNScqLSJJKy/9oADAMBAAIRAxEAPwCEyEAEBqHINAt1cxygrmK/KXeknOKO7ee/nxXLnzPW+KXnz4rXLnzIqHcBNxchG6nrUHeClquXTdv3jK+/uz5GV7a9p8iBSEU2ugHMbiKF9l1HeXSr5xld35/b5XMryvz9Xdct1xi02fdb/RL6xGed1OnuuYm+78uzJWvbdn8iJaQBxTo7pTSvVI7SqVfKMk++8szLPvPT2zI1pOvdvCkVJbJIzdLC4uTE3Mr9/kjUzctCbWU4LJHBT66RJIigXvnlfNwzMkDUMLjj4TfIlWGH1qWyNsuMAIQXvnlz5RJI2ACAB4AHgAeAB4AHgAeAB4AHgAeAB4AHgAeAB4AHgAeAB4AHgAeAB4AHgAeAB4AHgAeAB4AUQBqZqQ1xu2asf2cw+7KSPdVSN4RxJ981z5nCvflxXPmuBHPQpxUd/wB2sVHrJeqJad0VJc55kRkmrZacuD58mTG27TlwfF8mQTAHyOTgK35vVzLKZAsmlXGMl3wuufMzWnaV1z5ojXLVUQf5lkg2mzOsl3SfypqTE3Vr7vRWf2JTVuXorP52Oe2g/qYb6+rVZd+yli/MPGefeSuZ57/sr7uowoL619ndNSgtN0krNg4tY+7C6tyJTy5d7iFxmkW7RCXJoNlBSjwto29GXUy6jKcxbgSkhnHZJUbXvk2USSM7ss2FrGxDm5045mJAjeOlrDkfnpAkaf15c246RJIhgAgAMAJABABADJ85KBUtQSOJiUm9DCpUhTXim7IqZfSBKpgloQVOWBdn7g0dNPCym/Cnmynrbbp07vwtxWrv9PyXIMc8ouLae4t6VRVIKa0aT9QjE2BABABABABABABABABABABABABABABABADkwBr2GYam5JQ38tbhYVMUWsp1bp0EcOe/34rl9yvz3+/FaZdMsyFMs3Sl3ak9WWFaGMsqmK3jUmlOuZjK+99p65cjJvRv34PXLkyDdKXA/D7RCdxAlqcTElZutlOWtGWaeevq77sjLO+evq7rTIhUi2YbsEgmXLqQHlEvvLcWjJPvV8+hlf78Xnr0IlkMFOyO2xBRLpVaYlIG8og+uM8t/vyMlrbf6vlyREqXmkl/cdW4lwHlKSkXU4cOeMSnv75kp719+uZHMdgVZdsBTAXLLSlA530sIyXLvhmZLXLvhmRTEaHOyd7M2eWUpFxYAXftRKffzMk+HfHMat8z/iYsS7ssUiwu5YgWESiVy74DFp0Pde6iCHTbSzDPWJXEJ7xpzfXPiX1fhqYlEiN6z5iBI2ACAEgAgDhx85ZXLkyiBMmqCElRYAktc+tM46aMF4XUkrpbim2li5xnGhTdm82+CvZW65+nM0f/AMTGcggYpRngOK0gIPGwc/GNaxTbtY4KuFSXilJt8Xn36j/Z/wBAUyZk9e0papaEAhM9UxEuTwuJgTMHI2HHn0qtK3wOzfr9vqcEqMW141dJ35Pqt/nkcO0sKJcxSErC0g7ixkpJyIjis1qexoV1Wh4l5nLBW3mc1Jq0Xb3776CRl8D5e5qtXjvUvZ+ufyR2TdmzkykzlSlplK7Kyk0l7AvwOh1jZLDzS8W45qe1MPOoqTdpPLPS/VZe5yRoLEIAIAIAIAIAIAIAIAIAIAIAIAIAcmANpN4qdmrZQN0KtMSJablrdoHtRXrl3wzK1cu+GZDOlnJRDuEBSw++m8pSJaTSHvm2UZJ8OvlvuzJPh1y4b8/8kU7MKIL3mBKt+YxFM1CECwa3HWJXBdOC5O5K4LpwXJ3IVyzUUntWl1H8SYT2pKmG6gZ55RmnlfdrwXNczNPK+7Xgua5kKs3beczKR+Is+7OS/ZTxtlE7reXBcuplutu04Ll1ISjNIBKhuEhlrvvSlFeSRo4yA8sub+y5qxlfe9NeC5qxFrUBftmgkqcBpoWs5Wc2fOJ5d8sjLk/f2siOgB0jLsmhmY70sqWbC5A0yjK+998cibvV98ciEZWHNhYAgMsFRuXTdgfeie+0Zd9oaEi7XGRayWN0knMsriPdETcm+8ZplbyDjPvLNwzid5O8Qj1kGPxN38okkafXf6aAEMAEAJAFfjthzZ8/DgBSJcxZQJrboIuoA/mYFhrHVTqqFPmnf5HnNpUXUxStpZL3b+p6yvYcnELCZ4UshqFEhRS3AKBAJ1LPfS0cVKo0zOtTUolpgNkSkTVyeqeSqlQSajvgM4Ju4BN3tSOESruo7mE0lSXhyaM77VdlIlzJU1AatNChpuNT8D8I2Tik8ju2XWlKDg9xhIxLUIA1U/phOnYVGBTKQlShLkmYFHeAICRSRSklg6n42GnfGq57te2eXq7Pp4aTm6i+HNK13yutPfPkV3SHo5MwnVla5UxMwFlSlFQBS1QLgcR3xz1aDgrlrgNpRxUnG1na+t18lxKaNBZhABABABABABABABABABABABADkwBuNXSNSrcY3emalSzYXuwY7nKK7r3wKvdZ98Mu9SIS7FKXAaglBIcM8pSph3ja1nuqJvvffFWMr731++X3ISLEgcVkJdCKhuzgpZuq7lmHZjLvi+WRl1+75ZEKpYoYFkdhwTLl0kBUlRUTUtrJsdYyu789eL59DK78XPXi+a5EMzKqzMVsQZcqsOmaG7anAJyjJa2/L5cjNa2/Ltu5EUxCbpKnRZIq/DlhCt6WpKRdbGxMZJvz9Xff0JTeq19XdZPoQzQogFVvfAWyU1ostIli5cX5xKtfLvzM1bd98t2ZFOSMlGzAArDbi7oKUJvYv5iMk++fUlPh21rnzI5oVYq7TuyrmtPaAQAwe2Y0iVbd35kprd2nzI1gDPJrFTKVQoWZLsG7/eiVcyXfUatJe/be47Sqknho/wBIlNeROXkRtwy/1Gk/C3gXMSSIQfHlcuOf24RJNxv7+HOAEgAgDXdCsUhSeqUoOiYTSoWXUEKQUvYqSpLtmKucYVMrFTirOq/I2GHDTBGEcmaJZwKjEbZ2iqbNThMEZwCikTFTRLlhu4pJYu++O6Oul4dXqc9eNkldJerZL7RMLMOAw65rdago6xiSApSSFMSSSKjxOkRU3M6NmSSquK3o8yjWXoQAqVEEEEgi4ILEEZEEZGJUmndGE6cZxcJLJ6nTtPas2eQqfMVMUBSl2duTAefnGydWU9Tmw2CoYZt01m/N9DjSeNo0t8DtS4nPjtpypbPVfJg4+P3jKMJs018VQprf5Z9+pJg8R1iAsBgYNWdiaVRVIKSJFLhYychUEa/aId9xsh4XqPUEs9Td7NGN2ZuMLXuRy1uHbu0cd2kZmiLvmOiDIIAIAIAIAIAcmAN4vif8QqHAMsJSLlw51zisXAqlwXfmRTZehysl1AEMovLKUC1lMN4Dsxknw745mSffzzGTiXCiN7tJC95bpDLTLQCwdAex97KJWlu/PzJjpZe2nK76kEyXvEHNqXUK5lCy8shIskJXxHuxKeV/wrrX2Mk8u0rrXPfdEKncEjfeprTFmZLG8n8iKkNw7UZ5eXorP3eZnu5eis9ObsyFSQ7AEkBi34kwy5l0mo2TSp8smjK+V/wrr53Mk8u0rrlvuiGkuCB+I96DUvrZedazZIKeGvdGW7l7WfIyvlbd6Kz5dSJKQCaRu60XeWv88w2FKuH0iXff78VyJz368+K5cyAI0GbsabDrE8ZiuKXLA5xlfvl0M798nyGABjT2R+XdFCswpRuplMMjkYnPf32ic9/b/wAERTbiMrbqKk5F9XS/DtRl3zJv3vz/ACNOXLMaBjm2qmPM5GBI1Qt8OAcZWzNuPGJJGn9Rp3sO/wCUSSIR6+UAI8Aa3ZUtsPKIzAVMHfWaf+Ijlqv4zhqfE5d6JGtlzkzAFoLg/DkeB5Rmzg0yLzCYMKTVMuODmnxGUblDxK7OadRxdojOleDGIwcyWlnUl0Pk4Yh+TiN8rOKsYYWbpVlJ7jzsezbH/llf/Z/4xP8Ap5cUWf8Axihwl6L/ANjNbV2cvDzVSZlNaGqpNQBIBZ+LERqlFxdmWFCtGvBVIp2fHtlbiMUE2zPDh3wSJnVUct5zSp5UbBz68hE2NMajby1OpMj81+Wn6xjc3qH/AFFbtnCKmqSBkkXPM/tGcJeE5MXQlWkktEKrGFIEtIpAABfOJ8N8x+64RUErWOiQVKFh4mwiG0bIKUlkT/wx1WfBh+sY3N37b3y9BU4UDVR5FRI8oXJVNLe31ZPGJsCACACACACACAHJgDfcxnmyWJqHaBUbXDDTWKy5UjaRcB2IYlOqFOxKzexqO6bOIX7/AATfv8fciCTekb3aIS6U9YlnqWQ5Cgwy90xlfj2uhldb+10IWTTY/hCzpNCOrWMyol1UlzYjtRlnfn736GWd+fq7rkRLBYXu/OXL62Xx99dQ73piV3vdn7GSt3m7P2XsQLCacx1OgJEuX1UxnYC6yk8W7UZq9+fq7r7mSbv/ALvV3X3I5iDYHN90rFCRMl9kpQm6qhrq3hEprd2nz3WJTW721s+fIgnCzlgkbyaww6uZZVMtN91WRMZLXvVczNa5a/Vc3xGTkqcA9p6RXfeQBQUIGVQYXiU13z5kpr/HPW7IZou6su0Aq6whThQSgboYuQ7RkuC7fUyXBfi65kSkGqlt+yR7y6ksUMPdcMNcjEpq3IyurX3ei59SM5k96iO0pi4WDZhqbgZiMie/sMCS7DPK1y+ab5DQWOnmvvJutRcOqVUOuUpCDcqQElQexeoj0Y3UoeOVs/I58VVlSp+KLiv+52Xkel9Euh+zcTKE6WtU9ORJURcXYgAMY63QhHcedntPFT/ut0Vvnd+50dLNl4TDplokypaFOSWF2bUm+fyjJ1IUYOb8ubOSSrYqap+Jvjdt2RV7Ow1XdlFHnOTk956L4aUFGOiyJp2yJqCVySxOY0V3j6xn4HE1fuRlqduHweMmgVzBLRwA+7xkvHPIwcqVPmziwuJTLnEzesXLBYL7aA3FJdu9o6sLKjmpa89PsceMjiLqUP423a/f0PQdn4sTEhSVpWk5KT+8d8lYrIyujxT2tbJm4bFKnOTKxBqSprhfvIfTiOXdCo3OKhCCvvdszuwUo0251K0klpHxNL0357vmZHZ+x1rBmKQsyxnS1Xfqw5sY6cPstv4qztyOLH/qKMW6WGt4uL09N/r5FrhcNhyGRMMvkpLjxIvG6rsaDzpyfnn9vmacP+q8TR+GtRi1/tbXzuSztlLAqSUzE8UKB8wbxW1tmV6edrrkX+D/AFRgMRJQbcJPdJfVfWxXLlg3yPEWMV56BxuNEhLubnib+UTcj9uN7vNkkQZhABABABABABABABABADkwB6Cp7Ob6PlUOAzLhznpFWioGLSDnk2SsqVaUjgWFxxiU+/ySm+/uMWk2fPQruak5FKRYOmou40iUyVbvnzI5mbngSxFUzq1s4CQLMqnN8olad2ujJaZfi6IlILt73ZqtMXWi6SzUIqS97doRlfLl6LP3ZkmvL0Wfu8yFeZLF7rpH4kzq1sFpclkUrOhLUxly/CutPYyWnaV1p1yITLLkJBrYJUUGuZWgPLKlmyakhnb3om+V3p6LPXLqZJ73p6Kz1y6kFnUoCxdagjeNKt2alUwlgyr24Rld5L5+2Rlnkn0z9nboRCXmhPClRl2FQ3pRMxXEWtGV979/fIyvvfv75EFmUQCR2yEbqWNpiSs3VpaMs7+32yMs759Ps7EZQ4YEN2FKTuIcAmWSTdWumkTfvfzMr8vq+ZEshnZwd8C6UPYLSHurTIxupUZ1ZeCCu+7PgjTiMTSw8fHVkktOfLuxW4rHAWBqa1mALZO2vnFzR2bCGdV3fBaLz+1jzeJ29WqZYdeFcXnLyWi8yvngkVzDb3Ugdo6CMKuJcn+zQSS5ad8zOlgf24f6rGNt7k82++Hqev7A2qNk7Ll1CrEzyqYiUOJYEq4ISGvrYaxqmo08uBpw9Orjar8K19Eu/c4kKVPX1iyVVXc+8+XhFNXqyqz+L04Fzh6EaELLzfHvgazZeEAAjOnE0VZ3ZaSlB2GkbbmhpnRMlOmnJ8+6MrZWNPitK4ycmVKllS6UoQHJLAACMlBWtYnxylLqeH4zpJiZOKmYrBzFIC1VGS1UojIOnRTC5BBeO/CUKzXh8LsZbUWBpQUlVTqWzSaefO31NdhvaHg9oSThNoIOHWrJZugLHZUlR7JHA8Wcx0xhOjPxRKOVSNWPhlpxRy7d6JHD4WTMlq6+slE4IdlVElBQ18reUdtPHQlKSqZLdcr62zpWjKlnLkrlHgeg8+YtgpKEcVuVp5EJF/MRxz2vSpytTvL2Xq/sWdLZWIqw8VZKL9e/Uh2lgF4DEmUshbJDEOykrGbHK1os8NXWKp+Jq25oqMbhXQkoxlnqn0f3R2bL2Ph5wtOVLOgICkvzyMVtbZEI5wv7fYuKH6wxKl4a8Y9bNX93b0ODa+x5uHU0xNj2VpuhY5H6ZxTVaE6eunHvTu1z2eB2jRxcfgdnwevlxXNedtCvjSd4QAQAQAQAQAQAQAQAQA5MAeh93wuXDM5OTj5xVFQNPHm9uBsp1HgXNjp55EjKcwBfVnDkMU1KzLhhrC/EdSJTUk+4HUW3U0qcTKlHNjUrTSJzvz7sZb+fdvsMUk8dadZaKwxlkk7yn3U2JGcSn3r1Jv3q+fLmQrppJ9y6yCyJZSrdmhgKlNdVxrGed7b/AFfIzV7236cXy6cCKZKNkqIZ6AVihFY3pKkJF1aJz92JT3rrz5kp7114u2+73cSCabVEWvMAWCkEHdnJTKG8bXuD2oyXDyy9szNa28svbMjnyjZKlf3QKxYnOUpEtNhwvoIlNarrl75kxa1XXL3VyCYTZRS5crAXdb9malMsWHFj+2SW75e2ZkuHll7XZDiklL1ZgUAqNa2O9LVTkjQcnjdh4KpUjDi19n1NWIr/ALVCdVbk5cFks1zKBcyZPmUIBKlKZhmpRj1X9PD03GK8MVrx8zwl6uKqKdR+KT04LkluN1sPoDLlATMasPmJYLgd7do8su+KLF451F4Y/DH3ZeYTBqk/E85ey74knS3Z2GSZePKFBMgUCWA3WKcCUSwZLXD8hqACwFT4nFb/AKGO0oycE28k/mYidtxU+f8AxEwupQSko0lpT2UIGiOHi9zGVaMm3GRe7NlQpQUqTunr17+xtdjYxKUhNQpIqlKJABGZSeCk/LuirlBt337/AL+ZvxMbfHu7+ZZnpXJQGM1J/wALq/4vHTSweKn/ABg/l8ymrY3B0/5TXln8rnGen4QT1csr4OaR46+EdlLZk071pqK6ps46uPjVjbCwlN8k7fI4MX01x012X1Y4S0hP+5Tq8jHans+jxk/P8I0x2VtnEaRUFza/L9ipmzpizVMUpZHvLUpZHiX+cZPa1OGVKnb2+X3OiH6Mq1H/APJxHks/m/oNqPLy+caJbYxDeVl5fcs6f6L2bBWk5NvjK3pZL6iYjAy5iSaQ4zHD9OcXWGxVPFQ0z3rvceB2rs3E7IxHgm7xf8Zbn9mt69MiTojixJniSpajLUFUoqLJNiaRo7XbhFPtvDRjCM47nn0Lv9PYqU5yg96y6o9XwZWQKJYQnif1+0UkW7ZF9USv8Tuyj6fdGVYtMqbJAM8KEo7wCVoYkOTZwcuLxc7NxjpPwy0ffyKPaOFVRXSzX1/J51JkLlLKFkIWklKkqJBBGb2j0sZKSujyeIjm4yizSYHa4oMuZMQtCrKQpJUnysx5gxz1sPGpuNOHxFbDyTp3SXeWat5DZGwcFMUWxExD5CkEDxJdoqauyks0n5P8Hq6H6vrJKNTw34uLz62lb2OLbnRSbIT1iCJ0r86M0/4xp35RW1sJKGaz+f57yPT4DblHEWjP4W9He8X57nyfk28jPxyF4EAEAEAEAEAEAEAOTAHoqvT5OLhh+ukVSKdDVcfG75e8GFz48YkDVo49wKrhxdJCRbPuyEEzJMYo3dr9oAuVNksBOlm1OcTyJS7+RGpF2cu1FXbU+aFM1Kb1XI0ESn38yU9/fNERVeoJ3rrCbLXoJqQSaUe6LHjGXJ9OHRmXK+XouT4v0IzKuUgmpqCUmuZSSTKWpR7PvaHOJvv/AAuasTfK/nwXNWIAT2kp3nrIQxVUGE5K5it0PbJuzGXJ98MjLk/f2aRCmUlylJs1BMs+4q8pS5iu7R84yu9X78d+Rnd6v3471YgYkKpGpWQndSFJ3ZqVzDcuLtyjLLf3wyMt6v3wy5FRtPGBG6ghuyKXFSXqTU9yx4/v6TZ2z/2kq9f+W5cHx/G7rp5Hau1nir4eg/h/ulx4pcuL39Na7YB/62QQWJmAfY94MbdoSbozfepzYCKVWC70Z7Ts7FJnSwWSuakMarePdHm4yUlzPRSi4PkQ7awRnSZkibMS8xBSmWgWCmdBbOxALmM6dRwmpX03GqpTjODilrvPCZMgktkcub8Ivq9aEbXVyp2dgq9VScJ+BaMsJcnifXjHP/rZr+CSLmGwaM2nWnKfnl9/c1+wOhcyclMyYerQbhw61Di1gnx8opMbt5wbgm5PrZfk6o4fA4bKlSTfF5+7ubDZ/QTDJG91i+9dP/5hMUz2piKjysvL73JntKtH+LS6JfW5aL6E4NQbqyk8UrmOPMkHxBjqpVcRq5eyOdbVxMXdS9UjM4roNi0qVLlKCpRIIKl0hTZVJD7w4t9osFVjZSksyzhtjDySnUi/GuC+t9ORa9GOiC5C1rxHVrCpZl0B1BlFJU9SR+VvGOHGYrxJKF1Z3ucuP2mq8Yxppqzvf5aGV6VbKThZ9MpYIIqCXdUt/dXxB0e5Hc5sMBjKllUWTXo+952Qp09q4SVHFQuuPPc1wku8nYxW2JplzJc9AYpUFfH5H6x6nENYrDqTVro+fUqT2djJUVJS8L1X14Pc1uPXdiYxM6UmYZu6oApABUW0fQHyjySTTcZbj2EpRdpQV7o0QWnqSQ4AqLnMMhV/rHVSeatxK7ErXxcDA+2LAoE2RiUMDNSpExtVIpIPexb/ACiPS7OqPODPO46Cykt5hpMyLQqZIscLiWMScVWlc1WxtrKQbF0nNJyIjmrUFM0YfEzw0rax3oqOl2x0yyJ8kfhTDcD+zXw7jpHm8ZhvA/EvP797+p9S/T+1liYfszd3b4XxXDqvddLvORXnpQgAgAgAgAgAgByYA9Fb7cTyiqKcQem+Ln1lAkaE6cmLcPdJVn5fmiRcaMrW1IFg777lr3c5B2gSMpDZ7vZtuppLFBd3OgsfeNoneT39xinZ/wDMfcRUHCwQ1Sn3jcEFhE5af5J5f55EK0Jakt1dkb24gJUxl0pHaINKdNYyu9d/q+f3Ju/P1fP7kc0KYFRv2xUCkVossJljeUFJqVcnSMlbd35mStu7vpn7biCcgZKalgn8QWoWXl0y06pXSN4DKJTeq7a1z6GcW93txWufNcCn2zjxTvOpTg7xFlpBSSkAslJzbUnlf0+y9nKnFV6q/wC1fV8+HA8ntfarqzeEwz+HSUlv/wBt/m/Iyk6aVFyYsZycndldTpqEbItOicknFSlXISVElrAhCiL8XaODaE1HDy73nfs+PixEfP5Hp2xcIVLBBIbUR5mmne56SrJJWZfongYgYZASiYpNXWUgiq9gHzsT8MzFhSo+K74FVXr+G0eOh5pJ2TOwJxs2aKZssdXLUMiucpq0cgCCO8xzY7+pVp0Hmm7vpHTvkWWGlTnTjGHV9d/18rGYlJ0jtLenqeqbN6ZYcoBmVIU10hJUH/pI072jytXZNdTfhs1xv9ziqYCu38Cuuq+pPN6fSU/y5UxZ/qKUA/En4RvobMnHOTXzIWxq0v5NL379SuxPtCxB/ly5UvvqWfAuB8ItIUIo6YbCpL+cm+ll9ypxPSrGLzxCxyRSj/iAfjG1Qitx2Q2XhIf2X6tv8DsJ0sxctKk9aVAhgZm8UHikm797jlGqeGpzs2jGrsrDTaajbpv75HNI2epQM2a97spyVE3dT3889Yvtn4BNqVRZbkeM/U/6o/Zg8LgHbc5Ldyj/AO27dnmZnpMoXi6xP8Txmz73TOnoV0oxOHk9XLSggE0FaSo3NwL5OY8//o4zk5tnqf8AiE6cFTW4kxPtBxy5tM2lcpClVS0pEsEPxF373HKOmnhIwd1mzVVxEqkLPK5BjtsqxSgZ8zq0JSerBBUATdi2pYB+QtHbCf7Wkb3ON0vGrORwyZkWUZJ6FbUptandJjI5pFrhMYlOah4X+ULpnDVoTloiwn7YR1K5agSlYYDV9CO4xXbQdGFO83ru3st/0/h8dPExVBfxabb0j166W3mWjyZ9fCACACACACACAHJgD0Y/py5fSKopxD+v3YQAih9r/Bh3/KBI1QyOuYe5cWNI0dL66wQGqz55cVMo7pYZAF8x7sSSMUNWu7jJSqkhiA+6l0207RiSV331GU3Ob5ON9dCzY1HshKnLXsmJ3d2Jvl3bL8HLiJyUJVMJApuqllKExADhayGFSaRkDfnG2EJVJKEd+nny5MTnGEfFJ5Ljw5LXUymN6REuJQ6sFxxWUkk7yi5zJsDZ49Lg9m0qdpVV4pe3p9zzWM2jWrfDF+GPlf8AHl6sqxOPLyB+cXqk3uRS/wCngt7JE4hQyPkBGxJmmVKlvRpui+NWtJw5WRvdYBxLAeLMLczHBj6Cmvi0asb8HVdGSdPKzueiYOYjDSVTZwKEJDqUxKfMO17XaPNLBzg7LM9O8dCorvIzHRPawxuLxM1JLJUgoORCQkgHkyhU3IR0YVNRaZz49ZxaNt0u6P8A/qGFISaJwZuBUkvQv+l8jo76l8p04uSb1Wj4XIwuIdGaqLzXfseFTZKpa1S1pKVpJSpJsQRmI1NNZHraNSM4qcXkzrkTQbA34axqkt53xmkrsuMFsXEzOxImHmUlI81sPjHNKvSjrJfP5GMsdh4fymvLP5XLmT0Gxag56pHJSy/+xKh8Y0vG0lx9DmltnDrRSfkvuZ/G4ZUpapa2CkEhV7W58NY6oTU4qUdGWVGrGrBTjoy52JsoBps7vQg/8ljjwGmt7C4wmCa+Kaz4Hgf1D+poyTw+Gl8P90lv5Llxe/dlqbc2kL3i+pU/Csz5xJuvPLQxGNw6581EtA3lkBP37hn4RqxJc4NKKPWf/b0nCYVMtKA9FS1EbxYMl/Em3KKxSvLLQtJR8Mc9WeTTJIqnK4qV8VNFnRh/TvxOGrVtUjHgSqw4ACSNAfOKfaNSdDEpwf8AavPXU9ZsGhSxuAaqq/xy6rJaPcckzBNdJI5XaNtDaFOeUn4X7fg58ZsTEUs6a8cf/L00fl6DAFZGLKEm87prje5RVIRi/C00+FrM65CWvHNidq06a8NP4n7d9CxwP6dr4l+Kt8EP/J+W7q/RkxL5x5yrVnVl4pu7Pb4bC0sNTVKjGyXd3xYkazoCACACACACACAHJgD0aKophPVuPfAlA3ocDz88oATuzzs4uOJ8vKAGFmz3eVhSRx5XuGziSc7iF/H/AEprT/uL+IZPmyJyI1hLXbq2yLJRQoB7DMjmB2olN35+5Kbvz+pjemW0VFYkVEhAFYYJBXdmHBi+eo4R6HZGGSg6rWunT/JRbVxF5KnHRZvruXl9TNys4vI6lK2dQjsisjXJhG5HNJXOvATE9YnrFrlp1XLAUpJ0IDj5xorudvgin1NlKEP75W6HXtjpPisRIGGmza5SVBXZSlSiHpqKcwHe73bhHK8PTjK8UdEKs5Rs9NxY+yzHJlYtKVdmc8ongon8N+87v+eKFv8Abryj3yPUVKP72BjUWsc/oz3LCqpIOh3VclDI+Ib4RuZTrIzHT/oqqb/1mFQg4hA3kKQlSZ6BoQffGhsdHyjRWpRqx8Lv5Ox3YXEftO0v4v25/fiY3ZXT2QmUp5PVzkiyEhkrU7MCA6eJBGmsecrbHquol4rx3t6ryLh0fFazye8ZhPaJiQoFQlqS90UlNuRckHmXjtWy6MVaNzrezaE4/C3fvdYscf7RFqBEmUlH9SzWfAAADxeMVs9f3u/TIxo7Hje9SXkvv+DKysQVrMxZqJNTq1U71H6D9G9bs3ZiglUqLouB5P8AU36g8cHgsE7QWUmt/wDtXLi9/TXuXjR7yz4JUfo0XXhtuPn8aLb09WVuK2jJTcSlzFcZhCR5XjCUppXsdsMPKSt4rdO/qaf2Y7KXPmnGTgPyykgMEoGZHebPyirxNZvNl3gsNCnaMfPmanphP3FniaR3J+jh/GOamdVZ3bPGSXr/AKl/9xMXlJfBEqa3/MfQsNpoYp5oT9YoNtL+tF8vqz136MnfB1FwqP5I44pz2AQAQAQAQAQAQAQAQAQAQA5MAejfL6RVFMHrxgAPruPKBIhGX14jgO54XAh9aljnbvbjlAka3nk+ZcXByYOH4ZiJFxozdr58VMe0H0u2RPZhuJPKcdPrmLUSS6ib552fmzR7ijTVOnGK3JHj61RzqSlxbIpZjdE1WOlKo6YyRrkhwc5CNybeiNEnGOrLPA7IWpiqyXapRASCRug8yWFr37nrtobQhhY2TvN6Lhz/AM6nZszBSxtTS1Nave+S7siLbmAoabLG4oXYFgpyFJTVcgEeRHjxYDHfvR8E/wCa91x68fUstobOeGk5Q/g//G/Hk93PIqtizyamJBCqgRmNQRzBEcOOX9TxcS72FNSoypvc/Zn0X0O2wMZhkzC1RHVzgNJqWfucGocimM4T8UblVi8M6FZ03pu6bjQSlaHMZ8+BjJnOjyz2pdA3KsdhU37U+WnXjMSOP5h48Y2QjCb8M8uZnHF18PnTzX/S/pwPO9kY4yTVRKmD+9liYkc73Hm0acZs2p4dXbjF29e/MtsJtbC4v4JScJcG7e+j+ZPKmVqqUXcuTbePhZu63hFhs3AKyqzWW5fX7epWfqLbn7cHg8K7bpNf/lfV+XEtZTRfHzyVySkRJhdlYrBnET0yE5G6zwSM/XOOTEzsrItsFDK7Pb9gYMSZApDMAEjhon6RSVZeKVj0FCPhhcwvtS2n1MopBuAw7zYfeNlPPM11FeSiea4bsI9aD7xd0/4x6FTW/nIvNrI3JSv6SnyY/WKXbcM4S6o9D+iav/Pp80/mn9CsihPehABABABABABABABABABADkwB6PFUUwkAEADevk5gSIcuWZ0HO/mYEjVD1kHzHM6CCA1QDHhmXYJY9vv1Nxmc+E3CK3amxJM68xICuyFhkkH3WbtZgMeEdeHxtahlB5cNf8HPXwlKtnJZ8Vr31M7M6IKQXTMqQz7wpXbNhq3hmIvMNtqlf+rFrpminxWyK1v6Mk+uXvoTI6NEHetcAORcnLJz+0dz29hEsrvy+7Kz/gm0Jb4+r+x3SNkpQxIAtUEsTMUEn8QAC+TMRxivxO36k01RVufy5L3LLCfpqmn4sRPx8llHld6v2OvqKSEZZS3O+sBRqlKoApSynuoe7nFE5uT8Us9/3z1Z6aCjGKUVZLcsllqvTgQzruVDeLrpUBMXuhpqfyIdLa6xMXbOL036dHxM2ouLi9NHuVnp1MbKlSxMmKlPQVbr5kDJ4sq1edWznrbPqYbMwkKCk4737cPtyPQ/ZHjqMRNllRAWgEJ0Kkk5cDST3jujZhacnGU92XqcG3atNVKdP+6zfll9T11eihpnzH6Z/vG8pnxJBEEnkXtF6E9QVYvDJ/CO9NlgfyzqpI/IdRp3ZWuCxdvgn5FTjsJf44GFwqwYtlJPQpqkbFph4k4qg7GLZJiTGlG8jS+zvYZ/mqG9MY9ydB45xT4ipqz0mGpXaR6n1d0J0G8fCw+fwisvqy3tojwT2v4kqxRl6JYnvIt8PnHfSj8Fzj/vZRyk9kcn+P6RcRVvQp6j/k+Zp8fIqwoVqgg+BcH6RW7Xp+Klfhn6fhs7P0lif2touL0lePrmvdJeZno8ufVAgAgAgAgAgAgAgAgAgAgByYA9GiqKYWAEMAB9P8IEh+/E87es4AQj7PmeR4cYAaeLXzbM8wNBprEolDabtq1JIupr0lzlrxzgOo19QL9pksS4YKSVHdD2DWyMSSR9WMhkRSSl3oLlBKyXtfIntRN9778jK739vfkRpe7C/aKUFk1pYLSpZF3toOzE99onvy6HPNoCCX/CAYlLoSJRDoJUbqZm3T72UZq9+f174kuXhzevPPNa5fcx21NtqnOiXuy1MVhIprUxCjxpPBTksO6O2FJQzepgpfuOy09++hDJSwiWWlOKhEtNiT1yJ7kFK0KCmNnbTuIt4mPUbOp0qmD8Md979e7HzXb9erHaH7s91rf9vd78z3vZe0ErSCC4IBB5G4irlFp2O6E1JHZLsadDdP1H25d0YmaJFJBDG4NiOMQSeN+0DoQcKo4rDJfDkvMQP7EnUf3fy7otcHi8/DIqMbg8vFEysrFMIt7lFKldnTsqWcTOCPdF192g8Y561WysjooUEnc9o6N4MJS8UmIndnocNCyuXaU3J8PAejHMdVj549p+FV/H4g5itJ5gUJbvjspYqN1Ra8+NxLZ01QeKi7rO63q2VyqB3h4CL88u/wCJt9kpC5ZQclJKY0YmKccyuwtWVLE+KOuTXVMyE2WUqKTmCQe8R42pBwm4vcfbcPXjXpRqx0kk/UZGBuCACACACACACACACACAHJgD0b194qinD19oECiAEb18oABACfLyHL1zgSH78A+vOAGkBgPdyvYMcmHkNM4kkaX1zzGYFQsWGZBudYAYpPHLLeyZWTJHAsLjQxKJTGTAbEtU7pqua0hjQkHVNRz1iV331JXf5fUx/TDadSuoQSQntqJuXIVQwYAJPed0Xzjtw1Oy8b75+ZhJ+L4UUmGlxvbuduHp2NDsbAuQtTsLhKQ6lAkorGgCVXe/Z5Rz1Z2y742NlapdeFfi+thMZMH8SkMyqSlZqqUpSSwJORNIGQFyY9JsKnOFNuX8ZZpfU8F+qK1KraMM3HV7s87eTv6m/wCie1x1aUvdG63IFh8IyxUP6kupzYOp/RjfgjX4TayF7hUytAbKB4gHOORxZ3RqJlpMxSEIK1rSlKQ6lKISlI1JJLARrNxktq+0HCIQSVAoLhBpVN60DMy0ywakMRckZxwTxjcpRpxu07Zuy77R0/6a0VKWjPLGwuLw2OnYUKlzJBRMCSGSEKVvUoJJAZ8zZo6YbTx1OpCFVqz3JeWvmjmns7Byi3BP188uWu4y0rbU/DTJdE0hC1CuyL5a0vFhTxM5VEpvK+Zy1sJTjTbprOzsazavTDGSEkpxMwAZXDA6ZiOvaGHhCClFWzOHZeKqVW4zd8iu6Le13aKcQlM+eJ0tVSaVoljeKSEGpCQrtNbWKmT8KuXtGn+5UUL2uw2jiVzVLmTFFS1F1E5ubG2n2EaMLeeIhfij0OOpwo4CpGGii/kcL70e0PmP9pstgzLCMKivEpp/DWTODpXhaZ1YyWH/AMwsfp5x5faVO01Pjl6fj5H1D9KYv9zDSov+15dJZ/O/qUkVp6oIAIAIAIAIAIAIAIAIAcmAPRfXAc4qinF/blygQEALEAQxID15+vhAkT1xv8hb5xABvWZY/K/yiRoMbNs+TO44k2uGHjAkRhp5j8p4qPAubGJJGUm9IvycOpLNUpnuKRkcjE349+Qvx78ivm7Lw6nUZUsp7RISEClThRUs9oghSrEaRsVSayv30Mlfv7EKtiycxLD3GakywpJcO5qIU4FnFjGSqy4/c2Kq1v8Avb5FTt3bSEp6uUXSQQAkUppUA6W1u5c3vbjF7gdmWtVxC6R39Xw6HnMfthy/p4Z5756//Xnz0Mzs+cTiZZPFu4MYvac26qbPPYmmlhpJF50emzgTNUQhCipUtSj2kg3sHLc2+kV1TF0nVlFvPvLqWNLZtd0YyhG+7LXr0Lfb/TLqAmTMQJkxbU9oJSCWClEgHwGfLOMYVac2vC8iHQqwv41bqZDpHi5+J6vrJi5iU1ChSiUoe4ISSwOYfNmvHXi8H/H9pHPhcVZyVR9C+6PbUTKwaJE6fPlkBSFpw1IVMQ6igFSgyU7zFr7sUU9j4h4ptRTTWr0T+umZcraVB4dXeafn36CYXa0iSJiMLhky0zUGWutapilpIIvlxiwpbCm6kamIq3azSSSRX1drRUHClDXe/t+TilhP5B/p+rR6BU6a0ivQ8/KVR6zfqGJSVDL5RnrqiINRzRVzcEXcZgv5RyVMLdMsqWNjFp6NHb/FJWC2YZxexcC78c4osNhp0sTDxcT2OO2jSxOz6vg1UVdPm+0RjtR6o+fv+Jq9im0RLQpcV/I5OkuJrmhP5E0+JufXKPLbUqXqKC3fN/ix9P8A0hhnDButL+95dI5fO5UxWHrBIAIAIAIAIAIAIAIAIAcmAPRH9Zl9eQtFUU9h3rn6zgAgGHrwgQLACfL6QAeuF4EiEeXkGPr4wAK9Pk4ytr56QJGKbXJtfynMN9xrEoDVJydnydV94XSUpy4nMGw8FyRqjdyNHYipVJ7QCRk27xiQuH+DN9L8cZaRLzUrtkkEsg7hYWSS5NhpF1saipTdZ6R06v7FRtjENU1Rjl4tem9eenqYwAkuY9IryZ57KKOnZuBMzES0B7u7Zsxfu7+cc+Mq/wCnpufBe7yR0YWmsRNU9zefRZs3UsU/y0gNvhMtiR7s1ClndSxaySOzHj3n/J+vs7HtrJKz004dHYxnSKXLmzEuA0vdCgomtiaSSbmx+HCPT4DZ7hDx1sr524d8Dym09oxr1fDRzS1e7y5HOlQ5xcxnuRSSpvVjx3D5xt8LZqbiiaX3/SNiVjRJnVLiTWxVmBCRzTFQNiWZTylNOtqb/P6RWxV6q6lxUbVGSXD7fYtZQ3osiok8jSYaf1coq1ySOJ0jRia0aNJzkceFwFTH4yNCnv1fBb33vKVanJJuSXOpvHi5zc5OUtWfaaFGFGnGlBWjFWXkNjE2hACQAQAQAQAQAQAQAQA5MAeiB/Vg4+N/pFUynD5eQY8oAd68RwgA9eB5QQCBAsQBIkB658/XKFiRG+3Pk57vnACDl8Pi5PP5QJGhOnhZ9OySrM2trnE3FxulsnctYZkLc63c6ZQ6ks876VzqsSoWISEoSz5AAjMl8849bsyHhw0ed37/AIPL7Rl48TLlZfX5tnFIRFzShvKWvU3I0/RrABlTVAMoiWkqLAF3BH5t8JDAjIx5zbuIvUVGO7N/b0z8z0f6ew7UHWe/Tpv75EvSDGgIKC5UoOLUBBLoXu2N7qFT58I59lYKpVqKosoxeut7Zpffgdu1sdToUnS1lJWtrk97ZisROD5OY9LOd3oeYpU2o6jpKzw+JhGT3IylBcfkTg8h5q+8b0pPd8zmfgW/5fYlQf6R5q+8bYpvX5s0Stufy+xMg8vir7xssaX1+X2HlXf5/cQsYnPOVGM3aLN9GN5Iq5afxUnnHBD/AJi6lnV/5cuhcyM4sW0ldlR4XNqMVds6500q7hYZMD36lo8jj8a8TPL+K0+59E2FseOz6Tcs6kv5Ph/tXT3fkR+vWpv8o4S+GwAQAkAEAEAEAEAEAEAEAOTAHoI+OWhLgeQdPd2oqypHjP0Sxz7r/KIMRR61L6Oe75wJF9fe/rKBFw9faCID194AWAE9cO+AD1y5QJEP6/e3rOBIik/a+XEEAc+7KAEVx8Q9zaygAOXzggjzHbQfFTsyy1Zx7XAL+hT6I8ljpWqzfNk+AwqlqCEgknhwFz8IsMRXjh6TqS3FVh8PLE1lTjv38FxNRtTGJw6AhDBdNIPaUEZpUToXJLXjyuBwVTH1XVqfxvdvnwXeR63HY+ngaKpU85WyW5brvvMxWPxhUSSSSbknMnnHp5OMIqnTVkjzNOEpydSo7tnJJlElzGuMbnRJ2R2IRHbTp2OKrUuSARvOa49MQiGOeJMbCFUCUiCYY1VXlY6qEc7kHVuQeBeOZRbd0ddSSUWnvNf0Z2QicFJVZa0kSyckq0J9ZRljYeOi09CtweNeHxsJR3e/L0uismylJUUqBCwSgg3UFJyDaaDXWPHzi4Nxffep9apVYVIKcdHn30I/XE8+Q1MYmwaR6z7vXKJJCAEaACABoAGgAgAaABoAGgBRAH//2Q=="
+                            alt="Superman animated series poster" onerror="this.style.opacity='.06';">
+                    </div>
+                    <div class="meta">
+                        <div class="title">Superman: The Animated Series</div>
+                        <div class="sub">1996–2000</div>
+                        <div class="where">Prime Video</div>
+                    </div>
+                </article>
+
+                <article class="slot">
+                    <div class="poster">
+                        <img src="https://m.media-amazon.com/images/M/MV5BNGY0MmU0YWUtZmNjZC00NjUyLTliMjktNDA2ZjIzZWEwNmZiXkEyXkFqcGc@._V1_.jpg"
+                            alt="Justice League poster" onerror="this.style.opacity='.06';">
+                    </div>
+                    <div class="meta">
+                        <div class="title">Justice League</div>
+                        <div class="sub">2001</div>
+                        <div class="where">Netflix</div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- WEAKNESS -->
+        <section id="weakness" class="block" aria-labelledby="weak-h">
+            <h2 id="weak-h">Weakness</h2>
+            <p>
+                Kryptonite (radioactive fragments from Krypton) weakens him. Magic affects him like any mortal.
+                Red sun radiation removes his solar-powered abilities. His compassion and refusal to kill
+                may also put him at strategic risk.
+            </p>
+        </section>
+
+        <!-- QUOTE -->
+        <div class="block quotes" style="font-style:italic; border-left:5px solid var(--gold);
+                background:linear-gradient(120deg, rgba(12,35,64,0.96), rgba(220,20,60,0.7));
+                opacity:0; transform:translateY(18px); animation:fadeInUp .9s .55s ease-out forwards;">
+            <p style="font-size:1.05rem; line-height:1.6">
+                Dreams save us. Dreams lift us up and transform us. And on my soul, I swear until my dream of a world
+                where dignity, honor and justice becomes the reality we all share I'll never stop fighting.
+            </p>
+
+            <div class="quotes-footer" style="text-align:right; opacity:.9; margin-top:.6rem">— Superman</div>
+        </div>
+
+        <!-- LEGACY -->
+        <section id="legacy" class="block" aria-labelledby="legacy-h">
+            <h2 id="legacy-h"> Legacy &amp; Impact</h2>
+            <p class="lead">
+                Since 1938, Superman defined the superhero archetype and inspired comics, film, TV, animation, games and
+                culture worldwide.
+            </p>
+
+            <div style="display:grid; grid-template-columns: 1fr 360px; gap:1rem; margin-top:.6rem">
+                <div>
+                    <p>
+                        His iconic “S” symbol stands for hope in Kryptonian lore and continues to resonate as a cultural
+                        emblem of courage and good will.
+                    </p>
+                    <div style="display:flex; gap:.6rem; margin-top:.8rem; flex-wrap:wrap">
+                        <div
+                            style="padding:.35rem .8rem; border-radius:999px; border:1px solid rgba(255,255,255,0.12); background:rgba(5,8,20,0.7)">
+                            Hope</div>
+                        <div
+                            style="padding:.35rem .8rem; border-radius:999px; border:1px solid rgba(255,255,255,0.12); background:rgba(5,8,20,0.7)">
+                            Justice</div>
+                        <div
+                            style="padding:.35rem .8rem; border-radius:999px; border:1px solid rgba(255,255,255,0.12); background:rgba(5,8,20,0.7)">
+                            Courage</div>
+                    </div>
+                </div>
+
+                <div style=" border-radius:10px; padding:0.9rem 1rem;
+                    background:linear-gradient(180deg, rgba(255,215,0,0.04), rgba(12,35,64,0.92)); border:1px solid
+                    rgba(255,255,255,0.10); max-width:290px;  * margin-left:auto* .legacy-highlight-title{ font-size:.85rem; color:#ffe7a9; margin-bottom:.3rem;
+                    font-weight:600; } ">
+                    <div class="legacy-highlight">
+                        <div class="legacy-highlight-title">Cultural Legacy</div>
+                        <p>
+                            From golden age comics to modern cinema, Superman created the blueprint
+                            for heroic storytelling and moral ideals in popular culture.
+                        </p>
+                    </div>
+
+        </section>
+
+        <!-- DEVELOPER / ABOUT -->
+        <section id="developer" class="block" aria-labelledby="dev-h">
+            <div class="section-row">
+                <h2 id="dev-h">Developer</h2>
+
+            </div>
+
+            <div class="dev">
+                <div class="text">
+                    <p style="font-weight:700">About me</p>
+                    <p>
+                        I am from India and this is just a normal project and something more a tribute as a superhero
+                        fan &amp; practice
+                        site.
+                        I'm refining layout, adding images, and leaving poster slots so you can drop your images
+                        directly
+                        into the <code>images/posters/</code> folder.
+                    </p>
+                    <!-- 
+          <div class="placeholders" aria-hidden="false">
+            <div class="placeholder">poster slot</div>
+            <div class="placeholder">poster slot</div>
+            <div class="placeholder">poster slot</div>
+            <div class="placeholder">poster slot</div>
+          </div> -->
+
+                    <!-- <p class="tiny" style="margin-top:.6rem">
+            Tip: replace placeholders with local image paths
+            (e.g. <code>images/posters/man-of-steel.jpg</code>)
+          </p> -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 🔹 1) ADD THIS CSS INSIDE YOUR <style> TAG -->
+
+
+    <section id="fan-info" class="block">
+        <div class="section-row">
+            <h2>Fan-Made Notice &amp; Guidelines</h2>
+
+        </div>
+
+        <p class="lead">
+            This page is a personal practice project and tribute to Superman. It is created by a fan
+            for learning web development and is not affiliated with DC, Warner Bros., or any official brand.
+        </p>
+
+        <div class="fan-section-note">
+            <strong>Important:</strong>
+            All characters, logos, movie titles, and related media are the property of DC and Warner Bros.
+            This website is non-commercial and made only for study, portfolio, and entertainment.
+        </div>
+
+        <ul class="fan-guidelines">
+            <li>Use this project only for learning and portfolio purposes.</li>
+            <li>Do not use official logos or art for commercial products without permission.</li>
+            <li>Always credit DC / Warner Bros. as the owners of Superman and related characters.</li>
+            <li>If you upload this online, clearly mention that it is a fan-made, unofficial website.</li>
+        </ul>
+
+
+
+    </section>
+
+    <script>
+        // Fan guidelines checker
+        document.addEventListener("DOMContentLoaded", () => {
+            const btn = document.getElementById("checkGuidelines");
+            const output = document.getElementById("fan-js-output");
+
+            if (!btn || !output) return; // safe guard
+
+            btn.addEventListener("click", () => {
+                const guidelines = [
+                    "Website is not commercial.",
+                    "Proper credit is given to DC Comics & Warner Bros.",
+                    "Fan-made disclaimer is visible.",
+                    "Logos and characters are used under fair-use / fan-use.",
+                    "Content is for learning and practice only."
+                ];
+
+                let result = "<strong>Guideline Check Completed:</strong><br><br>";
+
+                guidelines.forEach((g) => {
+                    result += "✔ " + g + "<br>";
+                });
+
+                output.innerHTML = result;
+            });
+        });
+
+    </script>
+
+
+    <!-- FOOTER -->
+    <footer>
+        &copy; 2025 Superman Tribute Truth, Justice &amp; Hope. Built for learning &amp; practice.
+    </footer>
+
+    <!-- Small script: graceful fallback for missing posters -->
+    <script>
+        document.querySelectorAll('.poster img').forEach(img => {
+            img.addEventListener('error', () => {
+                img.style.opacity = '.06';
+                img.alt = 'poster placeholder';
+            });
+        });
+    </script>
+</body>
+
+</html>
